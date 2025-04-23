@@ -2,8 +2,7 @@ module ID(
     input clk,
     input rst,
     input [31:0] instruction,  
-    input [31:0] WB_out,       
-    // input RegWrite_WB,         
+    input [31:0] WB_out,            
     
     output RegWrite,    
     output ALUSrc,
@@ -14,8 +13,10 @@ module ID(
     output [1:0] ALUOp,
     
     output [31:0] dataA,       
-    output [31:0] dataB,       
-    output [31:0] imm_ext,     
+    output [31:0] dataB,   
+    output [31:0] dataD,    
+    output [31:0] imm_ext,  
+    output [4:0] rs1, rs2,   
     output [4:0] rd            
 );
 
@@ -41,7 +42,8 @@ module ID(
         .WB_out(WB_out),
         .RegWrite(RegWrite),
         .dataA(dataA),
-        .dataB(dataB)
+        .dataB(dataB),
+        .dataD(dataD)
     );
 
     // Immediate Generator
@@ -50,5 +52,7 @@ module ID(
         .imm_ext(imm_ext)
     );
     assign rd = instruction[11:7];
+    assign rs1 = instruction[19:15];
+    assign rs2 = instruction[24:20];
 
 endmodule
