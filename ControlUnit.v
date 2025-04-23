@@ -3,7 +3,7 @@ module ControlUnit (op,RegWrite,ALUSrc,MemWrite,MemRead,ResultSrc,Branch,ALUOp);
     output RegWrite,ALUSrc,MemWrite,MemRead,ResultSrc,Branch;
     output [1:0]ALUOp;
 
-    assign RegWrite = (op == 7'b0000011 | op == 7'b0110011) ? 1'b1 : // load va r-type cho phep write
+	assign RegWrite = (op == 7'b0000011 | op == 7'b0110011 | op == 7'b0010011 | op == 7'b0110111) ? 1'b1 : //  store va branch khong cho write
                                                               1'b0 ; 
     assign ALUSrc = (op == 7'b0000011 | op == 7'b0100011 | op == 7'b0010011) ? 1'b1 :// load or store or i type
                                                             1'b0 ; 
