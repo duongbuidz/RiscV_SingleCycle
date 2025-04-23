@@ -4,14 +4,15 @@ module RegisterFile (
     input [4:0] addA, addB, addD,
     input [31:0] WB_out,
     input RegWrite,
-    output [31:0] dataA, dataB
+    output [31:0] dataA, dataB, dataD
 );
 
     reg [31:0] regfile[0:31];
     integer t;
+
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            
+            // Reset all registers; explicitly set x0 = 0
             regfile[0] <= 32'h00000000;  
             regfile[1] <= 32'h00000003;
             regfile[2] <= 32'h00000002;
@@ -45,17 +46,25 @@ module RegisterFile (
             regfile[30] <= 32'h00000005;
             regfile[31] <= 32'h0000000A;
         end
-        else if (RegWrite && (addD != 0)) begin
-            regfile[addD] <= WB_out; 
+        else begin
+            // Ensure x0 is always 0
+            regfile[0] <= 32'h00000000;
+
+            // Only write if RegWrite is active and destination is not x0
+            if (RegWrite && (addD != 0)) begin
+                regfile[addD] <= WB_out;
+            end
         end
     end
-	reg [31:0] dataA_reg, dataB_reg;
+
+    reg [31:0] dataA_reg, dataB_reg;
     always @(posedge clk) begin
         dataA_reg <= (addA == 0) ? 32'h0 : regfile[addA];
-        dataB_reg <= (addB == 0) ? 32'h0 : regfile[addB];
+        dataB_reg <= (addB == 0) ? 32'h0 : regfile[addB];        
     end
 
     assign dataA = dataA_reg;
     assign dataB = dataB_reg;
+    assign dataD = regfile[addD];
 
 endmodule
