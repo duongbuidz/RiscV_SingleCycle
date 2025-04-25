@@ -11,6 +11,7 @@ module ID(
     output ResultSrc,
     output Branch,
     output [1:0] ALUOp,
+    output [2:0]imm_sel,
     
     output [31:0] dataA,       
     output [31:0] dataB,   
@@ -29,7 +30,8 @@ module ID(
         .MemRead(MemRead),
         .ResultSrc(ResultSrc),
         .Branch(Branch),
-        .ALUOp(ALUOp)
+        .ALUOp(ALUOp),
+        .imm_sel(imm_sel)
     );
 
     // Register File
@@ -48,7 +50,8 @@ module ID(
 
     // Immediate Generator
     ImmGen ImmGen(
-        .instruction(instruction),        
+        .instruction(instruction),  
+        .imm_sel(imm_sel),     
         .imm_ext(imm_ext)
     );
     assign rd = instruction[11:7];
