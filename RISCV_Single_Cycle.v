@@ -97,4 +97,6 @@ module risc_v_single_cycle (
 			  .input1(read_data),
 			  .select(ResultSrc),
 			  .out(WB_out));
+	reg[31:0] Instruction_out_top;
+    assign Instruction_out_top = instruction;
 endmodule 
