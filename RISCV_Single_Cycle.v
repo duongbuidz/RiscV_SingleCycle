@@ -1,4 +1,4 @@
-module risc_v_single_cycle (
+module RISCV_Single_Cycle (
 	input clk, rst_n
     // output [31:0] pc_out
 );	
