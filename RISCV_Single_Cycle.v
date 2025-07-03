@@ -1,5 +1,5 @@
 module risc_v_single_cycle (
-	input clk, rst
+	input clk, rst_n
     // output [31:0] pc_out
 );	
 
@@ -31,7 +31,7 @@ module risc_v_single_cycle (
     wire [31:0] read_data;
     
     PC PC(.clk(clk),
-		  .rst(rst),
+		  .rst(rst_n),
 		  .next_PC(next_PC),
 		  .PC_Out(PC_Out));
     PCAdder PCAdder(.PC_in(PC_Out),
@@ -43,8 +43,8 @@ module risc_v_single_cycle (
 						.PC_branch(PC_branch), 
 						.PCSel(PCSel),
 					    .next_PC(next_PC));
-    IMEM IMEM(.clk(clk),
-			  .rst(rst),
+    IMEM IMEM_inst(.clk(clk),
+			  .rst(rst_n),
 			  .PC_Out(PC_Out), 
 			  .instruction(instruction));
     ControlUnit ControlUnit (
@@ -58,7 +58,7 @@ module risc_v_single_cycle (
                             .Branch(Branch),
                             .ALUOp(ALUOp));
     RegisterFile reg_unit(.clk(clk),
-                            .rst(rst),
+                            .rst(rst_n),
                             .addA(instruction[19:15]),
                             .addB(instruction[24:20]),
                             .addD(instruction[11:7]),
@@ -82,8 +82,8 @@ module risc_v_single_cycle (
 								.rs1_data(dataA), 
 								.rs2_data(dataB),
 							    .PCSel(PCSel));
-    DMEM DMEM(.clk(clk),               
-			  .rst(rst),               
+    DMEM DMEM_inst(.clk(clk),               
+			  .rst(rst_n),               
 			  .MemRead(MemRead),           
 			  .MemWrite(MemWrite),          
 			  .address(alu_out),    
